@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QMenu>
-
+#include "inisettings.h"
 class SQLHelper;
 class QSqlTableModel;
 class QTableView;

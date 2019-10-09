@@ -15,14 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     sqlhelper.cpp \
-    dlg_modify_jh.cpp
+    dlg_modify_jh.cpp \
+    inisettings.cpp
 
 HEADERS  += mainwindow.h \
     sqlhelper.h \
     db_sql.h \
     datarecord.h \
     common.h \
-    dlg_modify_jh.h
+    dlg_modify_jh.h \
+    inisettings.h
 
 FORMS    += mainwindow.ui \
     dlg_modify_jh.ui

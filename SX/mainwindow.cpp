@@ -89,6 +89,9 @@ void MainWindow::setHeader_XSTB()
 ///[初始化UI]
 void MainWindow::InitUI()
 {
+    this->setWindowTitle("三星 ver:"+theIni.getStrImp("config/version"));
+
+
     this->InitTabView(ui->tableViewSX);
 
     this->InitTabView(ui->tableViewJH);
@@ -191,6 +194,7 @@ void MainWindow::on_btn_queryInGoods_clicked()
     this->pmode_jh->setQuery(sql);
     ui->tableViewJH->setModel(this->pmode_jh);
     setHeader_JHTB();
+
 }
 ///![商品价格查询]
 
@@ -321,6 +325,8 @@ void MainWindow::onModify()
         lwlgout<<sql;
         this->pmode_jh->setQuery(sql);
         QMessageBox::information(this,"提示","修改数据成功!");
+
+        ui->tableViewJH->show();
 
 
     }
