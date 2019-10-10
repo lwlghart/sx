@@ -11,8 +11,9 @@
 #include <QPainter>
 //
 #include "sqlhelper.h"
-#include "datarecord.h"
+
 #include "dlg_modify_jh.h"
+#include "dlg_xs_add.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -20,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    SNGener::readCnt();
 
     InitUI();
 
@@ -29,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    SNGener::saveCnt();
+
     delete ui;
 }
 
@@ -74,6 +79,11 @@ void MainWindow::setHeader_JHTB()
 
 void MainWindow::setHeader_XSTB()
 {
+    QStringList headerlst;
+    headerlst<<"交易序号"<< "交易时间"<< "品牌"<< "种类"<< "单位"<<"数量"<<"单价"<<"金额"<<"支付方式"<<"备注";
+
+    this->m_sql->setTV_headerData(this->pmode_xs,headerlst);
+
     ui->tableViewSX->setColumnWidth(0,160);
     ui->tableViewSX->setColumnWidth(1,160);
     ui->tableViewSX->setColumnWidth(2,100);
@@ -91,18 +101,21 @@ void MainWindow::InitUI()
 {
     this->setWindowTitle("三星 ver:"+theIni.getStrImp("config/version"));
 
-
     this->InitTabView(ui->tableViewSX);
 
     this->InitTabView(ui->tableViewJH);
 
     this->pmode_jh = new QSqlQueryModel(this);//进货明细数据模型
+    this->pmode_xs = new QSqlQueryModel(this);//销售数据模型
 
 
     //菜单设置
     ui->tableViewJH->installEventFilter(this);
     this->menu.addAction("修改",this,SLOT(onModify()));
     this->menu.addAction("删除",this,SLOT(onDelete()));
+
+
+    InitDtCtlData();
 }
 ///![初始化UI]
 //////////////////////////////////////////////////////////////////////////////
@@ -153,35 +166,60 @@ void MainWindow::SetTabViewColumnSpace(QTableView *m_tableView)
 
 //////////////////////////////////////////////////////////////////////////////
 
-///
-/// \brief MainWindow::on_pushButton_clicked 测试
-///
+
+
+///[添加销售数据]
 void MainWindow::on_pushButton_clicked()
 {
-    XS_Tab tab;
-    tab.brand = "12";
-    tab.jyCnt = 3;
-    tab.price = 200;
-    tab.jine = tab.getJine();
-    tab.beizhu ="大脚哈哈";
-
-    QString sql = tab.toInsertSql();
-    lwlgout<<sql;
-    this->m_sql->sql_Execute(sql);
-
-
+    Dlg_XS_ADD dlg_xs_add;
+    dlg_xs_add.exec();
+    if (dlg_xs_add.result() == QDialog::Accepted)
+    {
+        //二次确认
+        int r = QMessageBox::warning(this,"警告","是否添加此行数据?",QObject::tr("取消"),QObject::tr("确定"));
+        if (r == QObject::tr("取消").toInt()) {
+            lwlgout<<"cancle ;";
+            return;
+        }
+       XS_Tab xsda = dlg_xs_add.getData();
+       QString sql = xsda.toInsertSql();
+       lwlgout<<sql;
+       LOGINFO(sql);
+       this->pmode_xs->setQuery(sql);
+    }
 }
+///![]
 
-void MainWindow::on_pushButton_Xiaoshou_sel_clicked()
+///[查询所有]
+void MainWindow::on_pushButton_xsSave_clicked()
 {
-    QSqlTableModel *pModel = this->m_sql->InitTableViewModel_XS();
-
-    ui->tableViewSX->setModel(pModel);
-
-    pModel->select();
-
+    QString sql = QString::asprintf(XS_SelectAll);
+    lwlgout<<sql;
+    LOGINFO(sql);
+    this->pmode_xs->setQuery(sql);
+    ui->tableViewSX->setModel(this->pmode_xs);
     setHeader_XSTB();
 }
+///![]
+
+
+///[销售表查询]
+void MainWindow::on_pushButton_Xiaoshou_sel_clicked()
+{
+    QString strMemo = ui->txt_XS_memo->text();
+    QString strbegin = ui->dt_XSbegin->text();
+    QString strend = ui->dt_XSend->text();
+
+    QString sql = QString::asprintf(XS_Select,C_STR(strMemo),
+                                    C_STR(strbegin),
+                                    C_STR(strend));
+    lwlgout<<sql;
+    LOGINFO(sql);
+    this->pmode_xs->setQuery(sql);
+    ui->tableViewSX->setModel(this->pmode_xs);
+    setHeader_XSTB();
+}
+///![]
 
 ///[商品价格查询]
 void MainWindow::on_btn_queryInGoods_clicked()
@@ -191,6 +229,7 @@ void MainWindow::on_btn_queryInGoods_clicked()
 
     QString sql = QString::asprintf(JH_PriceQuery, C_STR(gstrcode),C_STR(gstrSupp));
     lwlgout<<sql;
+    LOGINFO(sql);
     this->pmode_jh->setQuery(sql);
     ui->tableViewJH->setModel(this->pmode_jh);
     setHeader_JHTB();
@@ -212,6 +251,8 @@ void MainWindow::on_pushButton_JH_clean_clicked()
     ui->txt_goodsupplier->clear();
     ui->txt_inGoodtime->clear();
     ui->txt_inGoodMemo->clear();
+
+    ui->textBrowser->clear();
 }
 ///![入库信息清空]
 
@@ -248,9 +289,13 @@ void MainWindow::on_pushButton_JH_Add_clicked()
                                     C_STR(_tab.Goodsupplier),C_STR(_tab.Goodintime),
                                     C_STR(_tab.GoodMemo));
     lwlgout<<sql;
+    LOGINFO(sql);
     this->pmode_jh->setQuery(sql);
 
     QMessageBox::information(this,"提示","添加成功",QObject::tr("确定"));
+
+
+    ui->textBrowser->append("添加成功.");
 
 }
 ///![入库操作]
@@ -322,11 +367,11 @@ void MainWindow::onModify()
                                         C_STR(newJH.Goodjine),C_STR(newJH.Goodsupplier),
                                         C_STR(newJH.Goodintime),C_STR(newJH.GoodMemo),
                                         C_STR(currentID) );
-        lwlgout<<sql;
+        LOGINFO(sql);
         this->pmode_jh->setQuery(sql);
         QMessageBox::information(this,"提示","修改数据成功!");
 
-        ui->tableViewJH->show();
+
 
 
     }
@@ -338,3 +383,27 @@ void MainWindow::onModify()
 ///![修改操作]
 
 
+
+void MainWindow::InitDtCtlData()
+{
+    QDateTime begin;
+    begin.setDate(QDate::currentDate());
+    begin.setTime(QTime(6,0,0));
+    ui->dt_XSbegin->setDateTime(begin);
+    ui->dt_XSend->setDateTime(QDateTime::currentDateTime());
+}
+
+///[切换界面]
+void MainWindow::on_tabWidget_tabBarClicked(int index)
+{
+    switch (index) {
+    case 1:
+    {
+        InitDtCtlData();
+    }
+        break;
+    default:
+        break;
+    }
+}
+///![]

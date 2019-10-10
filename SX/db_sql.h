@@ -7,9 +7,12 @@
 
 
 #define XS_Insert  "insert into sx_xiaoshou (jysn,jytime,brand,zhonglei,unit, jyCnt,price,  jine, zftype,  beizhu  ) " \
-    "values ('%s','%s','%s','%s','%s','%d','%d','%d','%d','%s')"
+    "values ('%s','%s','%s','%s','%s','%d','%d','%d','%s','%s')"
 
-#define XS_Select  "SELECT * FROM sx_xiaoshou WHERE jytime >'%s' AND jytime <'%s'"
+#define XS_SelectAll  "SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou"
+
+#define XS_Select  "SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou "\
+                   "WHERE (beizhu like '%%%s%') OR (jytime > '%s' and jytime <'%s')"
 
 
 //进货库存表

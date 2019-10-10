@@ -5,27 +5,55 @@
 #include <QDateTime>
 #include "common.h"
 #include "db_sql.h"
+//#include "inisettings.h"
+//#include "SXGlobal.h"
+#include "sngener.h"
+
 
 //序列号生成器
-class SNGener
-{
-public:
-    SNGener() {}
+//class SNGener
+//{
+//public:
+//    SNGener() {}
 
-    static int getSN()
-    {
-       static int cnt = 0;
+////    static int getSN()
+////    {
+////       static int cnt = 0;
 
-       if(cnt>999999)
-            cnt =0 ;
+////       if(cnt>999999)
+////            cnt =0 ;
 
+////       return cnt++;
+////    }
 
-        return cnt++;
-    }
-private:
-//    static int cnt = 0;
-};
+//    static int getSN()
+//    {
+////        if(cnt>999999)
+////            cnt =0 ;
 
+//        return cnt++;
+//    }
+
+//    int getCnt()
+//    {
+//        return cnt;
+//    }
+
+//    static void saveCnt()
+//    {
+////        theIni.getStrImp("SN/XS_SN",QString::number(cnt));
+//    }
+
+//    static void readCnt()
+//    {
+////        cnt = theIni.getStrImp("SN/XS_SN").toInt();
+////        lwlgout<<"cnt="<<cnt;
+//    }
+
+//protected:
+//   static int cnt;
+//};
+////int SNGener::cnt=0;
 
 
 //对应表中字段
@@ -38,33 +66,40 @@ struct XS_Tab{
     int          jyCnt;
     int          price;//分
     int          jine;//分
-    int          zftype;
+    //int          zftype;
+    QString          zftype;
     QString      beizhu;
 
     XS_Tab(){
-        this->jysn     = getjySn();
-        this->jytime   = getjytime();
+        this->jysn     = "";
+        this->jytime   = "";
         this->brand    = "";
         this->zhonglei = "";
         this->unit     = "";
         this->jyCnt    = 0;
         this->price    = 0;
         this->jine     = 0;
-        this->zftype   = 0;
+        this->zftype   = "";
 
         this->beizhu   = "";
     }
 
-    QString getjySn()
+   static QString getjySn()
     {
 
+//        QString _sn = QDateTime::currentDateTime().toString(DATETIME_STYLE_2) +
+//                      "_" + QString::number(SNGener::getSN());
+
+
+//        int nSn = theIni.getStrImp("SN/XS_SN").toInt();
+
         QString _sn = QDateTime::currentDateTime().toString(DATETIME_STYLE_2) +
-                      "_" + QString::number(SNGener::getSN());
+                "_" + QString::number(SNGener::getSN());
 
         return _sn;
     }
 
-    QString getjytime()
+   static QString getjytime()
     {
         return  QDateTime::currentDateTime().toString(DATETIME_STYLE);
     }
@@ -77,7 +112,7 @@ struct XS_Tab{
     QString toInsertSql(){
         return QString::asprintf(XS_Insert, C_STR(jysn), C_STR(jytime),C_STR(brand),
                                  C_STR(zhonglei),C_STR(unit),
-                                 jyCnt,price,jine,zftype, C_STR(beizhu));
+                                 jyCnt,price,jine,C_STR(zftype), C_STR(beizhu));
     }
 
     QString toSelSql(QString beginTime,QString endTime)

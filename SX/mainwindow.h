@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <QMenu>
 #include "inisettings.h"
+#include "datarecord.h"
+#include "EasyLog.h"
+
+
 class SQLHelper;
 class QSqlTableModel;
 class QTableView;
@@ -43,6 +47,10 @@ private slots:
 
     void onModify();
 
+    void on_pushButton_xsSave_clicked();
+
+    void on_tabWidget_tabBarClicked(int index);
+
 private:
     void InitSQL();
 
@@ -66,8 +74,12 @@ private:
     SQLHelper*  m_sql;
 
     QSqlQueryModel* pmode_jh;
+    QSqlQueryModel* pmode_xs;
 
     QMenu   menu;
+
+//    XS_Tab  mXStab;
+    void InitDtCtlData();
 };
 
 #endif // MAINWINDOW_H

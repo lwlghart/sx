@@ -1,0 +1,14 @@
+//initial log success
+
+[INFO] [Index: 0] 2019-10-10 13:46:03 <...\SX\main.cpp.>@16=>qMain:   版本号:202010.1
+[INFO] [Index: 1] 2019-10-10 13:46:03 <...\SX\sngener.cpp.>@25=>readCnt:   读取数据>>19
+[INFO] [Index: 2] 2019-10-10 13:46:15 <...\SX\mainwindow.cpp.>@232=>on_btn_queryInGoods_clicked:   SELECT * FROM sx_jinhuo WHERE (GoodCode like '%%') and (GoodSupplier like '%%')
+[INFO] [Index: 3] 2019-10-10 13:46:43 <...\SX\mainwindow.cpp.>@217=>on_pushButton_Xiaoshou_sel_clicked:   SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou WHERE (beizhu like '%%') OR (jytime > '2019/10/10 6:00' and jytime <'2019/10/10 13:46')
+[INFO] [Index: 4] 2019-10-10 13:46:43 <...\SX\mainwindow.cpp.>@217=>on_pushButton_Xiaoshou_sel_clicked:   SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou WHERE (beizhu like '%%') OR (jytime > '2019/10/10 6:00' and jytime <'2019/10/10 13:46')
+[INFO] [Index: 5] 2019-10-10 13:47:49 <...\SX\mainwindow.cpp.>@187=>on_pushButton_clicked:   insert into sx_xiaoshou (jysn,jytime,brand,zhonglei,unit, jyCnt,price,  jine, zftype,  beizhu  ) values ('20191010134732_19','2019-10-10 13:47:32','去去去','','','2','1200','2400','微信','哈哈')
+[INFO] [Index: 6] 2019-10-10 13:47:56 <...\SX\mainwindow.cpp.>@217=>on_pushButton_Xiaoshou_sel_clicked:   SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou WHERE (beizhu like '%%') OR (jytime > '2019/10/10 6:00' and jytime <'2019/10/10 13:46')
+[INFO] [Index: 7] 2019-10-10 13:48:09 <...\SX\mainwindow.cpp.>@198=>on_pushButton_xsSave_clicked:   SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou
+[INFO] [Index: 8] 2019-10-10 13:48:11 <...\SX\mainwindow.cpp.>@217=>on_pushButton_Xiaoshou_sel_clicked:   SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou WHERE (beizhu like '%%') OR (jytime > '2019/10/10 6:00' and jytime <'2019/10/10 13:46')
+[INFO] [Index: 9] 2019-10-10 13:48:11 <...\SX\mainwindow.cpp.>@217=>on_pushButton_Xiaoshou_sel_clicked:   SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou WHERE (beizhu like '%%') OR (jytime > '2019/10/10 6:00' and jytime <'2019/10/10 13:46')
+[INFO] [Index: 10] 2019-10-10 13:48:16 <...\SX\mainwindow.cpp.>@217=>on_pushButton_Xiaoshou_sel_clicked:   SELECT jysn,jytime,brand,zhonglei,unit,jyCnt,0.01*price,0.01*jine,zftype,beizhu FROM sx_xiaoshou WHERE (beizhu like '%99%') OR (jytime > '2019/10/10 6:00' and jytime <'2019/10/10 13:46')
+[INFO] [Index: 11] 2019-10-10 13:48:33 <...\SX\sngener.cpp.>@34=>saveCnt:   保存数据成功>>21,2019-10-10

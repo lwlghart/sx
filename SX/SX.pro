@@ -16,7 +16,10 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     sqlhelper.cpp \
     dlg_modify_jh.cpp \
-    inisettings.cpp
+    inisettings.cpp \
+    EasyLog.cpp \
+    sngener.cpp \
+    dlg_xs_add.cpp
 
 HEADERS  += mainwindow.h \
     sqlhelper.h \
@@ -24,10 +27,14 @@ HEADERS  += mainwindow.h \
     datarecord.h \
     common.h \
     dlg_modify_jh.h \
-    inisettings.h
+    inisettings.h \
+    EasyLog.h \
+    sngener.h \
+    dlg_xs_add.h
 
 FORMS    += mainwindow.ui \
-    dlg_modify_jh.ui
+    dlg_modify_jh.ui \
+    dlg_xs_add.ui
 
 DESTDIR += $$PWD/../bin
 
